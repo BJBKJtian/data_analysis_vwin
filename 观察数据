@@ -1,0 +1,17 @@
+data=pd.DataFrame(row_data)
+
+# 设置显示范围
+pd.set_option('display_max_columns', 50)
+pd.set_option('display_max_rows', 50)
+
+print('数据的前5行：\n', data.head())
+print('数据的后5行：\n', data.tail())
+print('数据的行列数：', data.shape)
+print('各变量的数据类型：\n', data.dtypes)
+print( data.info())  # 数据的整体情况
+print('各变量的缺失值比例：\n', data.isnull().sum(axis=0) / data.shape[0])
+print('各观测的缺失值比例大于0.3的数据：\n', data[data.isnull().sum(axis=1) / data.shape[1] >0.3])
+print('数值型数据的描述统计：\n', data.describe())
+
+str_variables= data.columns[ data.dtypes == 'object'] 
+print('文本型数据的描述统计：\n', data[str_variables].describe())
