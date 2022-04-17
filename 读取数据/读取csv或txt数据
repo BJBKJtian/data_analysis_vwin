@@ -1,0 +1,13 @@
+import pandas as pd
+
+# 函数说明
+# pandas.read_csv(io,sep=',',header=0,names=None,index_col=None,usecols=None,encoding=None，...)
+# io：文件路径
+# sep：分隔符
+# header：指定列名，默认为0，即第一行
+# names：指定列名，人为赋值；  例：names=['name','gender']
+# index_col：指定索引列
+# usecols：指定提取哪些列；  例：usecols=[0,.3]
+# encoding：指定编码类型；  例：encoding='utf-8'
+
+data = pd.read_csv(r"C:\Users\Administrator\Desktop\test.csv",sep=',')
