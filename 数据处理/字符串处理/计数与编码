@@ -1,0 +1,10 @@
+a.str.count() 统计指定字符串(支持正则)在序列字符串中出现的次数
+a.str.len() 返回序列字符串的长度
+    a.str.count(pat='s', flags=0)
+    a.str.len()
+
+encode(): 编码str --> bytes
+decode(): 解码bytes --> str
+    error='static'：编码/解码失败抛出异常
+    error='ignore': 编码/解码失败自动忽略非法字符
+    error='replace': 编码/解码失败则使用 ? 替代非法字符
