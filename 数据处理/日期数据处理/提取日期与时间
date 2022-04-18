@@ -1,0 +1,40 @@
+一、提取日期
+dt.date 和 dt.normalize()，他们都返回一个日期的 日期部分，即只包含年月日。但不同的是date返回的Series是object类型的，normalize()返回的Series是datetime64类型的。
+    df['time'].dt.date  # 返回object类型
+    df['time'].dt.normalize() # 返回datetime64类型
+
+
+二、基本函数
+df['time'].dt.year  # 提取年
+df['time'].dt.month  # 提取月
+df['time'].dt.day  # 提取日
+df['time'].dt.hour  # 提取小时
+df['time'].dt.minute  # 提取分钟
+df['time'].dt.second  # 提取秒
+
+df['time'].dt.quarter # 返回每个日期分别是第几个季度，1为第一季度
+
+df['time'].dt.week   # 返回一年的第几周
+df['time'].dt.weekofyear  # 返回一年的第几周，同dt.week
+
+df['time'].dt.weekday # 返回日期为周几，0为周一，6位周日
+df['time'].dt.dayofweek # 返回日期为周几，0为周一，6位周日，同dt.weekday
+df['time'].dt.weekday_name # 返回星期几的英文
+
+df['time'].dt.dayofyear # 返回一年的第几天
+
+df['time'].dt.month_name() # 返回月份的英文名称
+
+三、判断函数
+df['time'].dt.is_month_start # 判断日期是否是每月的第一天
+df['time'].dt.is_month_end # 判断日期是否是每月的最后一天
+
+df['time'].dt.is_year_start # 判断日期是否是每年的第一天
+df['time'].dt.is_year_end # 判断日期是否是每年的最后一天
+
+df['time'].dt.is_quarter_start # 判断日期是否是每季度的第一天
+df['time'].dt.is_quarter_end # 判断日期是否是每季度的最后一天
+
+四、日期差
+(df['start_time'] - df['end_time']).dt.days # 计算两日期之间差的天数
+    
