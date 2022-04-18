@@ -1,0 +1,6 @@
+# 重置索引
+data.reset_index()
+
+# 把表中的列设为索引，会替换已经存在的索引。
+data.set_index('Name')
+
