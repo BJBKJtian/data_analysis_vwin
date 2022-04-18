@@ -1,0 +1,9 @@
+# DataFrame.drop(labels, axis=0, level=None, inplace=False, errors='raise')
+# axis为0时表示删除行，axis为1时表示删除列
+# inplace:默认为False，即对原表不生效
+
+#删除行
+df.drop(labels=[0,1],axis=0,inplace=True)
+
+#删除列
+df.drop(labels=['gender',"age"],axis=1,inplace=True)
