@@ -1,1 +1,46 @@
+一、散点图 scatter plot
+sns.scatterplot(x=None, y=None, hue=None, markers=True, alpha='auto', legend='brief' )
+    x,y：输入的绘图数据。
+    hue：对输入数据进行分组的序列，将生成不同颜色来区分数据。
+
+
+二、相关图 correlogram
+# with regression
+sns.pairplot(df, kind="reg")
+
+# Density
+sns.pairplot(df, diag_kind="kde") # diag_kind：设置对角线上图形的类型
+
+# Histogram
+sns.pairplot(df, diag_kind="hist")
+
+sns.pairplot(df, kind="scatter", hue="species", markers=["o", "s", "D"], palette="Set2")
+
+
+三、矩阵图 pairwise plot
+同相关图
+
+
+四、抖动图 jittering with strip plot
+sns.stripplot(x="day", y="total_bill",data=tips，hue='smoker',
+              dodge=True,jitter=True,linewidth=1)
+
+
+五、计数图 counts plot
+sns.countplot(x="class", hue="who", data=titanic)
+
+
+六、边缘直方图 marginal histogram
+
+
+七、具有最佳拟合线的散点图 scatter plot with a line of best fit
+
+
+
+八、带边界的气泡图 bubble plot with circling
+
+
+
+
+
 
