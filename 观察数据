@@ -1,8 +1,8 @@
 data=pd.DataFrame(row_data)
 
 # 设置显示范围
-pd.set_option('display_max_columns', 50)
-pd.set_option('display_max_rows', 50)
+pd.set_option('display.max_columns', 50)
+pd.set_option('display.max_rows', 50)
 
 print('数据的前5行：\n', data.head())
 print('数据的后5行：\n', data.tail())
