@@ -1,8 +1,8 @@
 # 查看重复值
-# df.duplicated(subset=None, keep='first')
+# df [df.duplicated(subset=None, keep=False)]
 # subset：对特定列查找重复值
-# keep：first,对于每一组重复的值，第一次出现的值设置为False，其他所有值设置为True 
-#       last,每组重复值的最后一次出现被设置为False，而其他所有重复值被设置为True。 
+# keep：'first',对于每一组重复的值，第一次出现的值设置为False，其他所有值设置为True 
+#       'last',每组重复值的最后一次出现被设置为False，而其他所有重复值被设置为True。 
 #       False,所有重复项都为True。
 
 df.duplicated(subset=['id']).sum()
