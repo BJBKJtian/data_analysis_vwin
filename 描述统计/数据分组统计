@@ -1,5 +1,5 @@
 前言：
-pd.crosstab(行,列,margins=True, [值, aggfunc='mean']) # 展示分类与分类数据，默认 计数
+pd.crosstab(data[行],data[列],margins=True, [值, aggfunc='mean']) # 展示分类与分类数据，默认 计数
 
 df[['x1','x2']].groupby('x1').agg('sum') #展示分类与数值数据
 
