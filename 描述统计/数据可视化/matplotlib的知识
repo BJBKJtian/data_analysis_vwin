@@ -1,0 +1,70 @@
+一、前期准备
+import matplotlib.pyplot as plt
+
+plt.style.use('seaborn-whitegrid')
+%matplotlib inline
+
+# 方式一：显示中文字体
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
+plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+
+# 方式二：显示中文字体
+from matplotlib.font_manager import FontManager
+import subprocess
+mpl_fonts = set(f.name for f in FontManager().ttflist)
+print('all font list get from matplotlib.font_manager:')
+for f in sorted(mpl_fonts): #找到系统中存在的字体
+    print('\t' + f)
+    
+plt.rc("font",family='YouYuan')  #从系统中存在的字体YouYuan中选择一个进行设置
+
+
+
+二、开始绘图
+2.1 MATLAB绘图风格
+绘图
+plt.figure() # 创建图形
+
+plt.subplot(2, 1, 1) # (行、列、子图编号) 
+plt.plot(x, np.sin(x)) # x轴数据，y轴数据
+
+plt.subplot(2, 1, 2) 
+plt.plot(x, np.cos(x))
+
+设置参数
+plt.plot(x轴数据,y轴数据,'-g',label='文本',alpha=0.3) # '-g'设置线条风格和颜色
+
+plt.xlim(-1, 11) # 设置坐标轴上下限
+plt.ylim(-1.5, 1.5)
+
+plt.title("A Sine Curve") # 设置题目
+
+plt.xlabel("x") # 设置坐标轴题目
+plt.ylabel("sin(x)")
+
+plt.legend(frameon=False) # 显示图例，取消外边框，需在plot()函数中设置label
+
+plt.text(x轴位置,y轴位置,显示的数值,ha='center') # 图中显示数值，ha：水平对齐方式
+
+plt.savefig('my_figure.png') #保存文件
+
+
+
+2.2 面向对象绘图
+fig, ax = plt.subplots(2)  # 注意：与上一个方法的参数不同
+
+ax[0].plot(x, np.sin(x))  # 在每个对象上调用plot()方法
+ax[1].plot(x, np.cos(x))
+
+设置参数
+• plt.plot() → ax.plot()
+• plt.legend() → ax.legend()
+• plt.xlabel() → ax.set_xlabel()
+• plt.ylabel() → ax.set_ylabel()
+• plt.xlim() → ax.set_xlim()
+• plt.ylim() → ax.set_ylim()
+• plt.title() → ax.set_title()
+
+ax = plt.axes() # 注意：是axes ，不是axis
+ax.plot(x轴数据,y轴数据) 
+ax.set(xlim=(0, 10), ylim=(-2, 2), xlabel='x', ylabel='sin(x)', title='A Simple Plot') # ax.set()函数可以一口气设置很多参数
