@@ -1,3 +1,14 @@
+前言：
+pd.crosstab(行,列,margins=True, [值, aggfunc='mean']) # 展示分类与分类数据，默认 计数
+
+df[['x1','x2']].groupby('x1').agg('sum') #展示分类与数值数据
+
+pd.pivot_table(数据,index=[行方向分类],values=[显示的值],columns=[列方向分类],aggfunc='mean',margins=True) # 展示分类与数值数据
+-- 交叉表比groupby多一个汇总功能
+-- 交叉表默认显示的汇总平均数
+
+
+
 一、groupby() 函数
 1)基本语句
 grouped = df.groupby('Year')
