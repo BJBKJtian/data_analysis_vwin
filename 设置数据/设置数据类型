@@ -6,4 +6,4 @@ df['id']=df['id'].astype('object')
 pd.to_numeric(data,error='raise')
 
 # 将数据转换成 日期格式
-pd.to_datetime(data,errors='raise',format='%Y/%m/%d')
+pd.to_datetime(data,errors='raise',format='%Y/%m/%d') # format参数对应数据中日期的显示格式，而不是自己定义的日期格式
