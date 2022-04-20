@@ -28,6 +28,7 @@ data['avg_salary'] = data.groupby('company')['salary'].transform('mean')
     avg_salary_dict = data.groupby('company')['salary'].mean().to_dict()
     data['avg_salary'] = data['company'].map(avg_salary_dict)
 
+
 二、透视表pivot_table 
 pd.pivot_table(data, values=None, index=None, columns=None,aggfunc='mean',fill_value=None, margins=False)
 # 每个pivot_table必须拥有一个index
@@ -49,10 +50,17 @@ pd.pivot_table(df,index=[u'对手',u'胜负'],columns=[u'主客场'],values=[u'�
 4）Columns类似Index可以设置列层次字段，它不是一个必要参数，作为一种分割数据的可选方式
 pd.pivot_table(df,index=[u'主客场'],columns=[u'对手'],values=[u'得分'],aggfunc=[np.sum],fill_value=0,margins=1)
 
+
 三、交叉表crosstab 
 pd.crosstab(values=None, index=None, columns=None,aggfunc='mean', margins=False)
+# pd.crosstab(行,列，[值],margins=True,[aggfunc='mean'])
+-- 行、列均可使用多变量
+-- 不输入值(values)，默认计数
+-- margins=True，加入汇总情况
+-- aggfunc,对值采用什么聚合函数
 
-pd.crosstab(index=[fdata['cut'], data['clarity']],columns=diamonds['color'],  values=data['price'],aggfunc=np.mean,margins=True).fillna(0)
+
+pd.crosstab(index=[data['cut'], data['clarity']], columns=diamonds['color'],  values=data['price'], aggfunc=np.mean,margins=True).fillna(0)
 
 
 
