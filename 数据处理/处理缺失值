@@ -25,9 +25,9 @@ df.fillna(method='ffill')
 df.fillna(method='bfill')
 
 # 均值、中位数、众数填充
-df.fillna(df.mean()['a','b']) # 对['a','b']进行均值填充，适用于定量数据
-df.fillna(df.median()['a','b']) # 对['a','b']进行中位数填充，适用于定量数据
-df.fillna(df.mode()['a','b']) # 对['a','b']进行众数填充，适用于定性数据
+df.fillna(df.mean(),inplace=True) # 进行均值填充，适用于定量数据
+df.fillna(df.median(),inplace=True) # 进行中位数填充，适用于定量数据
+df[i].fillna(str(df[i].mode().values[0]),inplace=True) # 进行众数填充，适用于定性数据
 
 # 插值填充
 # DataFrame.interpolate(method=‘linear’, axis=0, limit=None, inplace=False)
