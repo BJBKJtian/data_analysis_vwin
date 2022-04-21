@@ -1,7 +1,7 @@
 一、t分布的区间估计
 要求：1）总体服从正态分布；2）总体标准差未知
 
-def mean_interval_estimation_t(data,alpha,sampling='infinite',N=None):
+def mean_interval_estimation_t(data,alpha=0.05,sampling='infinite',N=None):
     '''
     data:DataFrame中的具体一列数据，如df['x1']
     alpha:显著性水平
@@ -17,7 +17,7 @@ def mean_interval_estimation_t(data,alpha,sampling='infinite',N=None):
       confidence_interval=(sample_mean-t_score*(sample_std/np.sqrt(n)),sample_mean+t_score*(sample_std/np.sqrt(n)))
     else:
       confidence_interval=(sample_mean-t_score*(sample_std/np.sqrt(n))*np.sqrt((N-n)/(n-1)),sample_mean+t_score*(sample_std/np.sqrt(n))*np.sqrt((N-n)/(n-1)))
-    print(f'在置信度{1-alpha}下，{data.name}的置信区间为：')
+    print(f'在置信度{1-alpha}下，{data.name}总体均值的置信区间为：')
     return confidence_interval
 
 
@@ -27,7 +27,7 @@ def mean_interval_estimation_t(data,alpha,sampling='infinite',N=None):
 —— 总体标准差已知，样本容量>=30
 —— 总体标准差未知，样本容量>=30
 
-def mean_interval_estimation_z(data,alpha,sigma=None,sampling='infinite',N=None):
+def mean_interval_estimation_z(data,alpha=0.05,sigma=None,sampling='infinite',N=None):
     '''
     data:DataFrame中的具体一列数据，如df['x1']
     alpha:显著性水平
@@ -52,7 +52,7 @@ def mean_interval_estimation_z(data,alpha,sigma=None,sampling='infinite',N=None)
       else:
         confidence_interval=(sample_mean-z_score*(sigma/np.sqrt(n))*np.sqrt((N-n)/(n-1)),sample_mean+z_score*(sigma/np.sqrt(n))*np.sqrt((N-n)/(n-1)))
     
-    print(f'在置信度{1-alpha}下，{data.name}的置信区间为：')
+    print(f'在置信度{1-alpha}下，{data.name}总体均值的置信区间为：')
     return confidence_interval
 
 
@@ -83,7 +83,7 @@ def mean_interval_estimation_cheb(data,k=3,sigma=None,sampling='infinite',N=None
       else:
         confidence_interval=(sample_mean-k*(sigma/np.sqrt(n))*np.sqrt((N-n)/(n-1)),sample_mean+k*(sigma/np.sqrt(n))*np.sqrt((N-n)/(n-1)))
        
-    print(f'在置信度{1-alpha}下，{data.name}的置信区间为：')
+    print(f'在置信度{1-alpha}下，{data.name}总体均值的置信区间为：')
     return confidence_interval
     
     
