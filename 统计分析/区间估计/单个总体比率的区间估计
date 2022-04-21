@@ -1,4 +1,34 @@
-
+def ratio_interval_estimation_z(sample_p,n,alpha=0.05,N=None,population_p=None):
+    '''
+    sample_p：样本比率
+    n:样本量
+    alpha:显著性水平
+    population_p：总体比率
+    N:总体容量，默认无限总体或有限放回抽样
+    '''
+    z_value=st.norm.isf(alpha/2)
+    if population_p==None: # 总体比率未知时
+        if N==None: # 无限总体，或有限放回抽样
+            tmp=np.sqrt(sample_p*(1-sample_p)/n)  
+            confidence_interval=(sample_p -tmp*z_value, sample_p +tmp*z_value)
+            print(f'在置信度{1-alpha}下，总体比率的置信区间为：')
+            return confidence_interval
+        else: # 有限不放回抽样
+            tmp=np.sqrt(sample_p*(1-sample_p)/n) * np.sqrt((N-n)/(N-1))  
+            confidence_interval=(sample_p -tmp*z_value, sample_p +tmp*z_value)
+            print(f'在置信度{1-alpha}下，总体比率的置信区间为：')
+            return confidence_interval            
+    else: # 总体比率已知时
+        if N==None: # 无限总体，或有限放回抽样
+            tmp=np.sqrt(population_p*(1-population_p)/n)
+            confidence_interval=(sample_p -tmp*z_value, sample_p +tmp*z_value)
+            print(f'在置信度{1-alpha}下，总体比率的置信区间为：')
+            return confidence_interval    
+        else:
+            tmp=np.sqrt(population_p*(1-population_p)/n)  * np.sqrt((N-n)/(N-1)) 
+            confidence_interval=(sample_p -tmp*z_value, sample_p +tmp*z_value)
+            print(f'在置信度{1-alpha}下，总体比率的置信区间为：')
+            return confidence_interval   
 
 
 
