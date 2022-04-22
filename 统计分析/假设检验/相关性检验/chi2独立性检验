@@ -1,0 +1,20 @@
+数据需为 交叉表形式
+例：研究年龄是否对颜色有偏好？
+        红  黑  白
+青年人  10   5   4
+老年人  8    3   2
+
+def independent_test_chi2(data,alpha=0.05):
+    '''
+    data:pandas或list类型;但数据为crosstab数据
+    alpha:显著性水平
+    '''
+    stat, p, dof, expected = st.chi2_contingency(data)
+    
+    critical = st.chi2.isf(alpha, dof)
+    print('置信度=%.2f, critical=%.3f, chi2值=%.3f' % (1-alpha, critical, stat))
+    
+    if abs(stat) >= critical:
+        print('拒绝原假设，两变量存在相关关系')
+    else:
+        print('不能拒绝原假设，两变量相互独立')
