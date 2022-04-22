@@ -1,0 +1,41 @@
+一，Z检验
+要求：
+
+def two_hypothetical_test_z(data1,data2,assume_value,sigma1=None,sigma2=None,alpha=0.05,alternative='two-sided'):
+    '''
+    data:要检验的数据，需传入pandas格式，如df['x1']
+    assume_value:要检验的两数据的差值
+    sigma:两总体的标准差。若未给出，则以样本标准差代替
+    alpha:显著性水平   
+    alternative:选择检验方式。默认双尾检验；‘left’：左尾检验；‘right’：右尾检验    
+    '''
+    n1=len(data1)
+    n2=len(data2)
+    mean1=data1.mean()
+    mean2=data2.mean()
+    
+    if sigma1==None:
+        var1=data1.var()
+    else:
+        var1=sigma1**2
+        
+    if sigma2==None:
+        var2=data2.var()
+    else:
+        var2=sigma2**2   
+        
+    z_value=((mean1-mean2)-assume_value)/np.sqrt(var1/n1 + var2/n2) #检验的z值
+    
+    if alternative=='two-sided': # 计算双尾检验的z值
+        z_alpha=st.norm.isf(alpha/2)
+        p_value=st.norm.sf(abs(z_value)) * 2
+        
+    elif alternative=='left': # 计算左尾检验的z值
+        z_alpha=st.norm.isf(alpha)
+        p_value=st.norm.sf(abs(z_value)) 
+        
+    else:
+        z_alpha=st.norm.isf(alpha)
+        p_value=st.norm.sf(abs(z_value))  
+    print('在显著性水平为{:.3f}时，对应的z值为{:.3f}'.format(alpha,z_alpha))
+    print('检验的z值为{:.3f}，其对应的p值为{:.3f}'.format(z_value,p_value))
