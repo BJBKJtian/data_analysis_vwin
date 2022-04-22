@@ -1,0 +1,31 @@
+def two_hypothetical_test_f(data1,data2,assume_value=1,alpha=0.05,alternative='two-sided'):
+    '''
+    data:要检验的数据，需传入pandas格式，如df['x1']
+    assume_value:要检验的两数据方差之比的值，data1 / data2,默认进行方差齐性检验
+    alpha:显著性水平   
+    alternative:选择检验方式。默认双尾检验；‘left’：左尾检验；‘right’：右尾检验    
+    '''
+    n1=len(data1)
+    n2=len(data2)
+    var1=data1.var()
+    var2=data2.var()
+    
+    f_value=(var1/var2)*(1/assume_value)
+    
+    if alternative=='two-sided': # 计算双尾检验的f值
+        f_alpha1=st.f.isf(alpha / 2, dfn=n1-1, dfd=n2-1)
+        f_alpha2=st.f.isf(1-alpha / 2, dfn=n1-1, dfd=n2-1) 
+        p_value=st.f.sf(abs(f_value),dfn=n1-1, dfd=n2-1) * 2
+
+    elif alternative=='left': # 计算左尾检验的f值
+        f_alpha1=st.f.isf(alpha , dfn=n1-1, dfd=n2-1) 
+        f_alpha2=st.f.isf(1-alpha , dfn=n1-1, dfd=n2-1) 
+        p_value=st.f.sf(abs(f_value),dfn=n1-1, dfd=n2-1)
+    else:
+        f_alpha1=st.f.isf(alpha , dfn=n1-1, dfd=n2-1) 
+        f_alpha2=st.f.isf(1-alpha , dfn=n1-1, dfd=n2-1) 
+        p_value=st.f.sf(abs(f_value),dfn=n1-1, dfd=n2-1)       
+        
+        
+    print('在显著性水平为{:.2f}时，对应的f1值为{:.3f}，对应的f2值为{:.3f}'.format(alpha,f_alpha1,f_alpha2))
+    print('检验的f值为{:.3f}，其对应的p值为{:.3f}'.format(f_value,p_value))    
