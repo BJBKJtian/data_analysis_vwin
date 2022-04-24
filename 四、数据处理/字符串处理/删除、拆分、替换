@@ -1,0 +1,29 @@
+一、删除
+strip(to_strip=None): 删除两侧指定字符, 默认删除空白符
+lstrip(to_strip=None): 删除左侧指定字符, 默认删除空白符
+rstrip(to_strip=None): 删除右侧指定字符, 默认删除空白符
+
+
+二、拆分
+split(pat='', expand=True) 使用指定字符分割字符串, 支持正则
+rsplit(pat='', expand=True) 从右侧开始分割
+    expand=True: 返回DataFrame/MultiINdex
+    expand=False: 默认，返回Series/Index
+
+partition(pat='', expand=True): 第一次出现pat时将字符串分割为三个部分: pat前面的部分, pat本身, pat后面的部分
+rpartition(): 从右往左检测pat字符串
+
+
+三、替换
+replace(): 替换字符串
+    pat	字符串或编译的正则表达式
+    repl	str: 将匹配到的字符串替换为此字符串
+    fun: 传给fun的是对象相当于re.search(pat, string)的返回值
+    n=-1	替换的次数, 默认全部
+    case=None	是否区分大小写, 如果pat为字符串则默认为True, 若为编译的正则表达式则不能设置
+    flags=0	可传入re.IGNORECASE之类的参数, 但若pat为编译的正则表达式则不能设置
+    
+slice_replace(): 将选中的部分替换为指定字符串
+    start=None	开始位置
+    stop=None	结束位置
+    repl=None	要替换为的字符串
