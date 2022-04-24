@@ -1,8 +1,0 @@
-from statsmodels.stats.multicomp import pairwise_tukeyhsd
-
-print(pairwise_tukeyhsd(file['value_column'], file['type_column'],alpha=0.05))
-# alpha,显著性水平
-# 一次只能比较一个因素的不同水平，若要进行多因素分析，需多次调用函数
-
-group1以及group2表示的是因子的不同水平，然后分析他们两个组是否有显著性差异
-reject表示是否拒绝原假设，True表示的是拒绝原假设，说明两组均值有显著性差异
