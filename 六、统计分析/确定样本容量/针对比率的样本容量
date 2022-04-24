@@ -1,0 +1,15 @@
+def sample_size_ratio(allow_error,p=0.5,alpha=0.05,N=None):
+    '''
+    allow_error:允许的误差大小
+    alpha：显著性水平
+    p:总体比率或用样本比率近似。默认0.5，表示未知比率的情况下，取p(1-p)的最大值
+    N:总体容量，适用于有限总体不放回时
+    '''
+    z_value=st.norm.isf(alpha/2)
+    
+    if N==None: # 无限总体或有限放回抽样
+        n=np.ceil((z_value**2)*p*(1-p)/allow_error**2)
+    else:
+        n=np.ceil(N*(z_value**2)*p*(1-p)/((N-1)*(allow_error**2)+(z_value**2)*p*(1-p)))
+    print(f'在置信度{1-alpha}下，最小需要的样本容量为：')
+    return n

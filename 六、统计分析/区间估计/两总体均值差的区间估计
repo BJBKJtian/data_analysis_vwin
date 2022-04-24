@@ -1,0 +1,95 @@
+一、Z分布估计
+要求：
+—— 两总体标准差已知，正态分布
+—— 两总体标准差已知，非正态，但是大样本
+—— 两总体标准差未知，正态分布，大样本（也可以T分布估计）
+—— 两总体标准差未知，非正态，大样本
+
+def mean_mean_interval_estimation_z(data1, data2, sigma1=-1, sigma2=-2, alpha=0.05):
+    '''
+    data:DataFrame中的具体一列数据，如df['x1']
+    sigma:总体标准差
+    alpha:显著性水平
+    '''    
+    mean1=data1.mean()
+    mean2 = data2.mean()
+    n1 = len(data1)
+    n2 = len(data2)
+    z_value = st.norm.isf(alpha/2) # st:scipy.stats 
+    
+    if sigma1>0 and sigma2 >0: # 方差已知
+        tmp = np.sqrt(sigma1**2/n1 + sigma2**2/n2)        
+        confidence_interval=((mean1-mean2) -tmp*z_value, (mean1-mean2) +tmp*z_value)
+        print(f'在置信度{1-alpha}下，{data1.name} - {data2.name}总体均值之差的置信区间为：')
+        return confidence_interval
+    
+    else: # 方差未知
+        var1=data1.var()
+        var2=data2.var()
+        tmp=np.sqrt(var1/n1 + var2/n2)
+        confidence_interval=((mean1-mean2) -tmp*z_value, (mean1-mean2) +tmp*z_value)
+        print(f'在置信度{1-alpha}下，{data1.name} - {data2.name}总体均值之差的置信区间为：')
+        return confidence_interval
+
+
+二、T分布估计
+—— 两总体标准差未知，正态分布，大样本（比正态分布精确）
+—— 两总体标准差未知，正态分布，小样本
+
+def mean_mean_interval_estimation_t(data1, data2, alpha=0.05,sigma_equal=False):
+    '''
+    data:DataFrame中的具体一列数据，如df['x1']
+    alpha:显著性水平
+    sigma_equal:是否满足方差齐性,默认方差不齐
+    '''
+    mean1 = data1.mean()
+    mean2 = data2.mean()
+    var1=data1.var()
+    var2=data2.var()
+    n1 = len(data1)
+    n2 = len(data2)
+    
+    if sigma_equal!=False: # 方差齐时
+        sw=np.sqrt(((n1-1)*var1+(n2-1)*var2)/(n1+n2-2))
+        tmp = sw * np.sqrt(1/n1 + 1/n2)
+        t_value=st.t.isf(alpha/2,df=(n1+n2-2))
+        confidence_interval=((mean1-mean2) -tmp*t_value, (mean1-mean2) +tmp*t_value)
+        print(f'在置信度{1-alpha}下，{data1.name} - {data2.name}总体均值之差的置信区间为：')
+        return confidence_interval
+    else:  # 方差不齐时
+        tmp=np.sqrt(var1/n1 + var2/n2)
+        df=tmp**4/((var1/n1)**2/(n1-1)+(var2/n2)**2/(n2-1))
+        t_value=st.t.isf(alpha/2,df=df)
+        confidence_interval=((mean1-mean2) -tmp*t_value, (mean1-mean2) +tmp*t_value)
+        print(f'在置信度{1-alpha}下，{data1.name} - {data2.name}总体均值之差的置信区间为：')
+        return confidence_interval        
+
+
+三、切比雪夫定理估计
+要求：以上两种方法均不合适时
+
+def mean_mean_interval_estimation_cheb(data1, data2, sigma1=-1, sigma2=-2,k=3):
+    '''
+    data:DataFrame中的具体一列数据，如df['x1']
+    sigma:总体标准差
+    k:几个标准差之内
+    '''
+    mean1 = data1.mean()
+    mean2 = data2.mean()
+    n1 = len(data1)
+    n2 = len(data2) 
+
+    if sigma1>0 and sigma2 >0: # 方差已知
+        tmp = np.sqrt(sigma1**2/n1 + sigma2**2/n2)        
+        confidence_interval=((mean1-mean2) -tmp*k, (mean1-mean2) +tmp*k)
+        print(f'在置信度{1-alpha}下，{data1.name} - {data2.name}总体均值之差的置信区间为：')
+        return confidence_interval
+    
+    else: # 方差未知
+        var1=data1.var()
+        var2=data2.var()
+        tmp=np.sqrt(var1/n1 + var2/n2)
+        confidence_interval=((mean1-mean2) -tmp*k, (mean1-mean2) +tmp*k)
+        print(f'在置信度{1-alpha}下，{data1.name} - {data2.name}总体均值之差的置信区间为：')
+        return confidence_interval
+
