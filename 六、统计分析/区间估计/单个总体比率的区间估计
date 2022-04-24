@@ -1,3 +1,6 @@
+要求：大样本
+    np>=5 且 n(1-p)>=5
+
 def ratio_interval_estimation_z(sample_p,n,alpha=0.05,N=None,population_p=None):
     '''
     sample_p：样本比率
