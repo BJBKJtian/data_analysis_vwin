@@ -1,0 +1,29 @@
+一、集中趋势
+d1.mean()  #均值
+d1.median()  #中位数
+d1.mode()  #众数
+
+
+二、离散趋势
+d1.var()  #方差
+d1.std()  #标准差
+d1.mad()  #平均绝对偏差
+d1.skew()  #偏度
+d1.kurt()  #峰度
+
+
+
+三、统计函数
+d1.describe() #一次性输出多个描述性统计指标
+d1.count()  #非空元素计算
+d1.min()  #最小值
+d1.max()  #最大值
+d1.sum()  #求和
+d1.quantile(0.1) #10%分位数
+d1.idxmin()  #最小值的位置，类似于R中的which.min函数
+d1.idxmax()  #最大值的位置，类似于R中的which.max函数
+
+
+
+
+
