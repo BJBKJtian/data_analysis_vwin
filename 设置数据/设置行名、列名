@@ -1,5 +1,0 @@
-# data = pd.read_csv(...)
-
-index = ?
-columns = ?
-df=pd.DataFrame(data, index=index, columns=columns)

@@ -1,9 +1,0 @@
-# astype() 函数，适合将 '数值型数据' 转换为 'object数据'
-df['id']=df['id'].astype('object')
-
-# pd.to_numeric(data, error='raise') 函数，适合将 '纯数字文本数据' 转换成 '数值型数据' 
-# error参数：'raise'参数：无效的解析将引发异常；'corece'参数：将无效解析设置为NaN；'ignore'参数：忽略无效的解析，对无效解析数据不做处理
-pd.to_numeric(data,error='raise')
-
-# 将数据转换成 日期格式
-pd.to_datetime(data,errors='raise',format='%Y/%m/%d') # format参数对应数据中日期的显示格式，而不是自己定义的日期格式
