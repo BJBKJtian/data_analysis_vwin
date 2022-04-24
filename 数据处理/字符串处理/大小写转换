@@ -1,6 +1,0 @@
-df['a'].str.lower() # 字符串小写
-df['a'].str.upper() # 字符串大写
-df['a'].str.title() # 单词首字母大写
-df['a'].str.capitalize() # 字符串首字母大写
-df['a'].str.swapcase() # 大小写转换
-
