@@ -13,8 +13,8 @@ def mean_mean_interval_estimation_z(data1, data2, sigma1=-1, sigma2=-2, alpha=0.
     '''    
     mean1=data1.mean()
     mean2 = data2.mean()
-    n1 = len(data1)
-    n2 = len(data2)
+    n1 = data1.count()
+    n2 = data2.count()
     z_value = st.norm.isf(alpha/2) # st:scipy.stats 
     
     if sigma1>0 and sigma2 >0: # 方差已知
@@ -46,8 +46,8 @@ def mean_mean_interval_estimation_t(data1, data2, alpha=0.05,sigma_equal=False):
     mean2 = data2.mean()
     var1=data1.var()
     var2=data2.var()
-    n1 = len(data1)
-    n2 = len(data2)
+    n1 = data1.count()
+    n2 = data2.count()
     
     if sigma_equal!=False: # 方差齐时
         sw=np.sqrt(((n1-1)*var1+(n2-1)*var2)/(n1+n2-2))
@@ -76,8 +76,8 @@ def mean_mean_interval_estimation_cheb(data1, data2, sigma1=-1, sigma2=-2,k=3):
     '''
     mean1 = data1.mean()
     mean2 = data2.mean()
-    n1 = len(data1)
-    n2 = len(data2) 
+    n1 = data1.count()
+    n2 = data2.count()
 
     if sigma1>0 and sigma2 >0: # 方差已知
         tmp = np.sqrt(sigma1**2/n1 + sigma2**2/n2)        
