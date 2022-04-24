@@ -1,0 +1,75 @@
+def two_factor_ANOVA_interaction(data=None,type_col1=None,type_col2=None,value_col=None,alpha=0.05):
+    ''' 
+    要求各分类下数据量一致
+    data:要求DataFrame格式
+    alpha:显著性水平
+    type_col：当row_data=True时，需设置的分类列,如type_col='gender'
+    value_col：当row_data=True时，需设置的数值列
+    '''
+    pivot_table=pd.pivot_table(data=data,index=type_col1,columns=type_col2,values=value_col,margins=True)
+    mean_values=pivot_table.iloc[:-1,:-1]  # 均值的数据
+    mean1_list=pivot_table.loc[:,'All'][:-1]
+    mean2_list=pivot_table.loc['All',:][:-1]
+    mean_total=pivot_table.loc['All','All']
+    
+    # 计算数据量
+    # 该计算方法要求各分类下数据量一致
+    type1_values=list(set(data[type_col1].values))
+    type2_values=list(set(data[type_col2].values))
+    n1=len(type1_values)
+    n2=len(type2_values)
+    n=len(file.groupby(by=[type_col1,type_col2]).get_group((type1_values[0],type2_values[0])))
+    
+    # 计算SSBA
+    SSBA_list=[]
+    for i in mean1_list:
+        a=(i-mean_total)**2
+        SSBA_list.append(a)
+    SSBA=n*n2*sum(SSBA_list)
+    
+    # 计算SSBB
+    SSBB_list=[]
+    for i in mean2_list:
+        a=(i-mean_total)**2
+        SSBB_list.append(a)
+    SSBB=n*n1*sum(SSBB_list)
+    
+    # 计算SSBAB
+    SSBAB_list=[]
+    pos_list=[(x,y) for x in range(mean_values.shape[0]) for y in range(mean_values.shape[1])]
+    for i in pos_list:
+        x,y=i
+        a=mean_values.iloc[x,y]
+        b=mean1_list.iloc[x]
+        c=mean2_list.iloc[y]
+        num=(a-b-c+mean_total)**2
+        SSBAB_list.append(num)
+    SSBAB=sum(SSBAB_list)*n
+    
+    # 计算SST
+    SST_list=[]
+    for i in data[value_col].values:
+        a=(i-mean_total)**2
+        SST_list.append(a)
+    SST=sum(SST_list)
+    
+    SSA=SST-SSBA-SSBB-SSBAB
+    
+    MSBA=SSBA/(n1-1)
+    MSBB=SSBB/(n2-1)
+    MSBAB=SSBAB/((n1-1)*(n2-1))
+    MSA=SSA/(n1*n2*(n-1))
+    
+    Fa=MSBA/MSA
+    Fb=MSBB/MSA
+    Fab=MSBAB/MSA
+    Pa=st.f.sf(Fa, dfn=n1-1, dfd=n1*n2*(n-1))
+    Pb=st.f.sf(Fb, dfn=n2-1, dfd=n1*n2*(n-1))
+    Pab=st.f.sf(Fab, dfn=(n1-1)*(n2-1), dfd=n1*n2*(n-1))
+    
+    print('方差来源',' '*3,'离差平方和',' '*5,'自由度',' '*3,'均方',' '*3,'F值',' '*3,'P值')
+    print('组间方差1',' '*3, '%.2f'%(SSBA),' '*10,n1-1,' '*5,'%.2f'%(MSBA),' '*4,'%.2f'%(Fa),' '*3,'%.2f'%(Pa))
+    print('组间方差2',' '*3, '%.2f'%(SSBB),' '*10,n2-1,' '*5,'%.2f'%(MSBB),' '*3,'%.2f'%(Fb),' '*3,'%.2f'%(Pb))
+    print('交互作用',' '*3, '%.2f'%(SSBAB),' '*10,(n1-1)*(n2-1),' '*5,'%.2f'%(MSBAB),' '*3,'%.2f'%(Fab),' '*3,'%.2f'%(Pab))
+    print('组内方差',' '*5,'%.2f'%(SSA),' '*11,n1*n2*(n-1),' '*5,'%.2f'%(MSA))
+    print('总方差',' '*7,'%.2f'%(SST),' '*10,n1*n2*n-1)
