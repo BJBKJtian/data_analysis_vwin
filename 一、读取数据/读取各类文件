@@ -1,0 +1,5 @@
+with open(r'C:\Users\Administrator\Desktop\test.xlsx',mode='r',encoding='utf-8') as f:
+  # print(f.read())
+  file_list=[]
+  for i in f.readlines():
+    file_list.append(i)
