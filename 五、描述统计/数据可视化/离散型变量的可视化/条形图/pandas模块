@@ -1,0 +1,34 @@
+注：pd.plot无法绘制堆叠条形图
+
+1）垂直条形图
+
+data.plot.bar(width=0.8,
+              rot=0, # 设置x轴标签旋转的角度，0为水平显示
+              color='blue',
+              title='6省份的GDP分布')
+plt.ylabel('GDP(万亿)')
+plt.xticks(range(len(data['x'])), # 指定刻度标签的位置
+          data['x'] # 指定具体的刻度值
+          )
+for x,y in enumerate(data['GDP']):
+  plt.text(x-0.1,y+0.2,'%.2f'%y,va='center)
+plt.show()
+
+
+
+2）水平交错条形图
+
+# 汇总数据
+data = data.pivot_table(index='city',
+                        columns='year',
+                        values='counts').reset_index()
+data.sort_values(by='2016',ascending=False,inplace=True)
+data.plot.bar(x='city',
+              y=['2016','2017'],
+              color=['blue','red'],
+              width=0.8,
+              rot=0, # 设置x轴标签旋转的角度，0为水平显示
+              title='6省份的GDP分布')
+plt.ylabel('亿万家庭数')
+plt.xlabel('') # 设置为空
+plt.show()
