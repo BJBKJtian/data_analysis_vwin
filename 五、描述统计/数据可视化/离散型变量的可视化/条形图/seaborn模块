@@ -1,0 +1,14 @@
+seaborn模块可以增加误差棒，即各组别下的标准差大小。可反映各组别的离散程度
+
+sns.barplot(x='pclass',  # 指定x轴数据
+            y='age',  # 指定y轴数据
+            hue='sex',  # 指定分组数据
+            data=data,  # 指定数据集
+            palette='RdBu',  # 指定分类数据的不同颜色
+            errcolor='blue',  # 指定误差棒的颜色
+            errwidth=2,  # 指定误差棒的线宽
+            saturation=1,  # 指定误差棒的透明度，1为不透明
+            capsize=0.05  # 指定误差棒两端线条的宽度
+            )
+plt.title('年龄差异')
+plt.show()
