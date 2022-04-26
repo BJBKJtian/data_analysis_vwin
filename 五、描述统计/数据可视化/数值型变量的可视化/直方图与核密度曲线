@@ -1,0 +1,69 @@
+直方图一般用来观察数据的分布形态，横坐标代表数值的均匀分段，纵坐标代表每个段内的观测数量（频数）。
+一般直方图都会与核密度图搭配使用，目的是更加清晰地掌握数据的分布特征。
+
+1）matplotlib模块
+如果原始数据集中存在缺失值，一定要对缺失观测进行删除或替换，否则无法绘制成功。
+如果在直方图的基础上再添加核密度图，通过matplotlib模块会比较吃力
+
+any(data['age'].isnull()) # 检查年龄中是否含有缺失值
+
+plt.hist(x=data['age'], # 指定绘图数据
+         bins=20, # 指定直方图中条块的个数
+         color='blue', # 指定直方图的颜色
+         edgecolor='black' # 指定直方图的边框色
+         )
+plt.xlabel('年龄')
+plt.ylabel('频数')
+plt.title('乘客年龄分布')
+plt.show()
+
+
+2）pandas模块
+
+data['age'].plot.hist(bins=20,
+                      color='blue', # 指定直方图的颜色
+                      edgecolor='black', # 指定直方图的边框色
+                      normed=True, # 将直方图的频数更改为频率
+                      label='直方图'
+                      )
+data['age'].plot.kde(color='red',
+                     label='核密度图')
+plt.xlabel('年龄')
+plt.ylabel('频数')
+plt.title('乘客年龄分布')
+plt.legend()
+plt.show()
+
+
+3）seaborn模块
+使用matplotlib模块或pandas模块都会稍微复杂一些，推荐使用seaborn模块中的distplot函数。
+
+# 绘制男女乘客的直方图
+sns.distplot(age_male,
+             bins=20,
+             kde=False,
+             hist_kws={'color':'purple'},
+             label='男性')
+sns.distplot(age_female,
+             bins=20,
+             kde=False,
+             hist_kws={'color':'blue'},
+             label='女性')
+plt.title('乘客年龄分布直方图')
+plt.legend()
+plt.show()
+
+# 绘制核密度图
+sns.distplot(age_male,
+             hist=False,
+             kde_kws={'color':'purple','linestyle':'-'},
+             norm_hist=True,
+             label='男性')
+sns.distplot(age_female,
+             hist=False,
+             kde_kws={'color':'red','linestyle':'--'},
+             norm_hist=True,
+             label='女性')
+plt.title('乘客年龄分布核密度图')
+plt.legend()
+plt.show()
