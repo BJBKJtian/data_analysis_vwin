@@ -1,0 +1,32 @@
+1）matplotlib模块
+
+plt.boxplot(x=data, # 指定数据
+            patch_artist=True, # 要求用自定义的颜色填充箱型图，默认白色填充
+            showmeans=True, # 显示均值，以点的形式
+            boxprops={'color':'black','facecolor':'blue'}, # 设置箱体的属性
+            flierprops={'marker':'o','markerfacecolor':'red','markersize':3}, # 设置异常点的属性
+            meanprops={'marker':'D','markerfacecolor':'indianred','markersize':4}, # 设置均值点的属性
+            medianprops={'linestyle':'--','color':'orange'}, # 设置中位数线的属性
+            labels=[''] # 删除x轴的刻度标签，适用于绘制单一箱型图
+            )
+plt.title('分布的箱型图')
+plt.show()
+
+
+2）seaborn模块
+sns.boxplot(x='region', # 指定箱线图的x轴数据
+            y='price', # 指定箱线图的y轴数据
+            # hue:指定分组变量
+            data=data,
+            order=avg_price.index, # 传递一个字符串列表，用于分类变量的排序
+            color='blue',
+            showmeans=True, # 显示均值，以点的形式
+            flierprops={'marker':'o','markerfacecolor':'red','markersize':3}, # 设置异常点的属性
+            meanprops={'marker':'D','markerfacecolor':'indianred','markersize':4}, # 设置均值点的属性
+            medianprops={'linestyle':'--','color':'orange'}, # 设置中位数线的属性
+            )
+plt.xlabel('')
+plt.ylabel('单价(元)')
+plt.title('分布的箱型图')
+plt.show()
+
