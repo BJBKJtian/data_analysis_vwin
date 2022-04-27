@@ -1,0 +1,9 @@
+sns.heatmap(data=data, # 指定数据
+            cmap='PuBuGn', # 指定填充色
+            linewidth=0.1, # 设置单元格的宽度
+            annot=True, # 显示数值
+            fmt='.1e' # 以科学计数法显示数据
+            )
+
+
+
