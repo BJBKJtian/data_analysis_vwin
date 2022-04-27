@@ -1,0 +1,18 @@
+小提琴图将数值型数据的核密度图与箱线图融合在一起
+尽管matplotlib模块也提供了绘制小提琴图的函数violinplot，但是绘制出来的图形中并不包含一个完整的箱线图
+所以直接使用seaborn模块中的violinplot函数绘制小提琴图。
+
+sns.violinplot(x='day', # 指定小提琴图的x轴数据
+               y='bill', # 指定小提琴图的y轴数据
+               hue='sex', # 指定一个分组变量
+               data=data, # 指定绘制小提琴图的数据集
+               order=['one','two','three'], # 用于分类变量的排序，即x轴刻度标签的顺序
+               scale='count', # 用于调整小提琴图左右的宽度。area，表示左右拥有相同的面积；count，表示根据样本数量来调节宽度；width，表示左右有相同的宽度。
+               split=True, # 使用hue参数时，将小提琴图从中间分为两个不同的部分，默认为False。
+               palette='RdBu' # 指定hue变量的区分色
+               )
+plt.title('消费额情况')
+plt.legend(loc='upper center',ncol=2)
+plt.show()
+
+注： scale='count'时，宽度代表样本量的个数，不是面积！
