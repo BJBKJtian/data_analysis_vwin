@@ -1,0 +1,25 @@
+工作中往往会根据业务需求，将绘制的多个图形组合到一个大图框内，形成类似仪表板的效果。
+
+subplot2grid(shape, loc, rowspan=1, colspan=1, **kwargs)
+    shape：指定组合图的框架形状，以元组形式传递，如2×3的矩阵可以表示成(2,3)。
+    loc：指定子图所在的位置，如shape中第一行第一列可以表示成(0,0)。
+    rowspan：指定某个子图需要跨几行。
+    colspan：指定某个子图需要跨几列。
+    
+plt.figure(figsize=(12,6)) # 设置大图框的长和高
+
+ax1=plt.subplot2grid(shape=(2,3),loc=(0,0)) #设置第一个子图的布局
+ax1.set_aspect(aspect='equal') # 设置为正圆
+ax1.pie(...)
+ax1.set_title(...)
+
+ax2=plt.subplot2grid(shape=(2,3),loc=(0,1)) #设置第二个子图的布局
+ax2.plot(...)
+ax2.set_xlabel('')
+
+ax3=plt.subplot2grid(shape=(2,3),loc=(0,2),rowspan=2) #设置第三个子图的布局
+sns.boxplot(...,ax=ax3) # 其他绘图方法需要加入轴的信息
+ax3.set_xlabel('')
+
+plt.subplots_adjust(hspace=0.6,wspace=0.3) # 调整子图之间的水平间距和高度间距
+plt.show()
