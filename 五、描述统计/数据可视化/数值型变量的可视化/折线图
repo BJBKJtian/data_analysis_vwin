@@ -1,0 +1,39 @@
+对于时间序列数据而言，一般都会使用折线图反映数据背后的趋势。
+通常折线图的横坐标指代日期数据，纵坐标代表某个数值型变量，还可以使用第三个离散变量对折线图进行分组处理。
+
+仅使用matplotlib模块和pandas模块实现折线图的绘制。
+seaborn模块中的tsplot函数也可以绘制时间序列的折线图，但是该函数非常不合理
+
+1）matplotlib模块
+
+plt.plot(data['date'], # 指定折线图的x轴数据
+         data['count'], # 指定折线图的y轴数据
+         linestyle='-', # 指定折线的类型
+         linewith=2, # 指定折线的宽度
+         color='blue', # 指定折线的颜色
+         marker='o', # 设置点的形状
+         markersize=6, # 设置点的大小
+         markeredgecolor='black', # 设置点的边框色
+         markerfacecolor='brown', # 设置点的填充色
+         label='阅读人数' # 为折线图添加标签，类似于图例的作用
+         )
+plt.xticks(rotation=45) # 将刻度标签旋转45度
+plt.ylabel('人数')
+plt.title('人数趋势')
+plt.legend()
+plt.show()
+
+
+2）pandas模块
+
+data=data.pivot_table(index='month',columns='year',values='high')
+
+data.plot.line(style=['-','--',':'] # 设置折线图的线条类型（有三条线就设置3种）
+              )
+
+plt.xlabel('月份')
+plt.ylabel('气温')
+plt.title('每月气温波动趋势')
+plt.show()
+
+
