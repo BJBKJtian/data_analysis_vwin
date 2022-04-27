@@ -67,3 +67,15 @@ sns.distplot(age_female,
 plt.title('乘客年龄分布核密度图')
 plt.legend()
 plt.show()
+
+# 绘制直方图、核密度图以及正态分布曲线
+sns.distplot(profit_new.Profit,
+             bins=10,
+             norm_hist=True,
+             fit=st.norm,
+             hist_kws={'color':'steelblue','edgecolor':'black'},
+             kde_kws={'color':'purple','linestyle':'-','label':'核密度曲线'},
+             fit_kws={'color':'red','linestyle':':','label':'正态分布曲线'}
+             )
+plt.legend()
+plt.show()
