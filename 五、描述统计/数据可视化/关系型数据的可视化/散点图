@@ -24,8 +24,8 @@ plt.show()
 
 3）seaborn模块
 
-sns.lmplot(x=data['width'], # 指定x轴数据
-           y=data['length'], # 指定y轴数据
+sns.lmplot(x='width', # 指定x轴数据
+           y='length', # 指定y轴数据
            hue='species', # 指定分组变量
            data=data, # 指定数据集
            legend_out=False, # 将图例放置在图框内
