@@ -1,0 +1,38 @@
+1）matplotlib模块
+
+plt.scatter(x=data['width'], # 指定x轴数据
+            y=data['length'], # 指定y轴数据
+            color='blue' # 指定点的颜色
+            )
+plt.xlabel('宽度')
+plt.ylabel('长度')
+plt.title('宽度与长度的关系')
+plt.show()
+
+
+2）pandas模块
+
+data.plot.scatter(x=data['width'], # 指定x轴数据
+                  y=data['length'], # 指定y轴数据
+                  title='宽度与长度的关系'
+                  )
+plt.xlabel('宽度')
+plt.ylabel('长度')
+plt.show()
+
+
+
+3）seaborn模块
+
+sns.lmplot(x=data['width'], # 指定x轴数据
+           y=data['length'], # 指定y轴数据
+           hue='species', # 指定分组变量
+           data=data, # 指定数据集
+           legend_out=False, # 将图例放置在图框内
+           truncate=True # 根据实际数据的范围对拟合线做截断操作
+           )
+plt.xlabel('宽度')
+plt.ylabel('长度')
+plt.title('宽度与长度的关系')
+plt.show()
+
