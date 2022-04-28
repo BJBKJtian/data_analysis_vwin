@@ -1,0 +1,137 @@
+class Liner_regression:
+    '''
+    注：此类需要在一个单元格内进行运行，可使用 if __name__=='__main__': 
+    '''
+    train,test,model=(0,)*3
+    def __init__(self,mode,data,cause_variable):
+        self.mode=mode
+        self.data=data
+        self.cause_variable = cause_variable
+
+        
+    def liner_regression(self,cut_threshold=0.2):
+        '''
+        mode:方程模式
+        data：数据，包含因变量
+        cause_variable：因变量名称
+        cut_threshold:测试集所占比例
+        '''
+        # from  sklearn.model_selection import train_test_split
+        global train
+        global test
+        global model
+        train,test = train_test_split(self.data,test_size=cut_threshold)
+        model = sm.formula.ols(self.mode,data=train).fit() # sm：statsmodels.api，通过训练集进行训练模型
+        print('线性模型的参数为：\n', model.params)
+        print('='*40,'',sep='\n')
+        
+        print('模型、回归系数、方差独立性的显著性检验：\n',model.summary())
+        print('='*40,'',sep='\n')
+
+    def model_test(self,alpha=0.05):
+        global train
+        global model
+        res = model.resid # 获取了构造的模型的残差
+        n=train.shape[0]
+
+        # 残差正态性检验
+        if n<5000:
+            # shapiro检验
+            x,y = st.shapiro(res) # st:scipy.stats
+            print('shapiro统计量的值为： ','%.3f'%x)
+            print('shapiro统计量对应的P值为： ','%.3f'%y)
+            if y > 0.05:
+                print(f'在置信度{1-alpha}下，不能拒绝残差满足正态性')
+            else:
+                print('残差不满足正态性')
+        else:
+            # k-s检验
+            res=pd.DataFrame(res)
+            KstestResult=st.kstest(res,'norm',args=(0,res.std())) # 检验残差数据是否满足均值为0，标准差为std的正态分布
+            print(KstestResult)
+        print('='*40,'',sep='\n')
+        
+        # 变量多重共线性检验
+        # from statsmodels.stats.outliers_influence import variance_inflation_factor
+        vif =pd.DataFrame() # 创建空的数据框，用来存放数据
+        train_X=train.drop(self.cause_variable,axis=1)
+        x=sm.add_constant(train_X) # 增加常数列
+        vif['features']=x.columns
+        vif['VIF_values']=[variance_inflation_factor(x.values,i) for i in range(x.shape[1])]
+        print('各变量的VIF值：\n',vif)
+        print('='*40,'',sep='\n')
+
+        # 线性相关性检验
+        corr = train_X.corrwith(train[self.cause_variable])
+        print(f'各自变量与因变量{self.cause_variable}的pearson相关系数：\n',corr)
+        print('='*40,'',sep='\n')
+
+        # 异常值检测
+        outliers = model.get_influence()
+        leverage = outliers.hat_matrix_diag # 帽子矩阵（杠杆值）
+        # dffits = outliers.dffits[0] # DFFITS值
+        resid_stu = outliers.resid_studentized_external # 学生化残差值
+        cook = outliers.cooks_distance[0] # cook距离值
+
+        contat = pd.concat([pd.Series(leverage,name='杠杆值'),
+                           pd.Series(resid_stu,name='学生化残差值'),
+                           pd.Series(cook,name='cook距离值')],axis=1)
+
+        train.index= range(train.shape[0])
+        outliers_data = pd.concat([train,contat],axis=1)
+
+        # 离群值_学生化残差>3
+        a=outliers_data.query('学生化残差值 > 3 | 学生化残差值<-3')
+        print('数据中可能存在的离群值：\n',a)
+        print('='*40,'',sep='\n')
+
+        # 高杠杆值_杠杆值大于【2(p+1)/n】
+        threshold = 2*train.shape[1] / train.shape[0]
+        b=outliers_data.query('杠杆值 > @threshold')
+        print('数据中可能存在的高杠杆点：\n',b)
+        print('='*40,'',sep='\n')
+
+        # 强影响点_cook距离值>0.5
+        c=outliers_data.query('cook距离值 > 0.5')
+        print('数据中可能存在的高影响点：\n',c)
+        print('='*40,'',sep='\n')
+
+        # 残差的方差齐性检验
+        a,b,c,d= sm.stats.diagnostic.het_breushpagan(res,exog_het= model.model.exog)
+        print('LM统计量的值为：','%.3f'%a,'统计量对应的p值为：','%.3f'%b)
+        if b>0.05:
+            print('在置信度95%下，接受残差方差为常数的原假设')
+        else:
+            print('在置信度95%下，残差的方差不是一个常数')
+
+        print('F统计量的值为：','%.3f'%c,'统计量对应的p值为：','%.3f'%d)
+        if d>0.05:
+            print('在置信度95%下，残差项满足方差齐性')
+        else:
+            print('在置信度95%下，残差项的方差不齐')
+
+    
+    def predict(self):
+        global train
+        global test
+        global model
+        test_X = test.drop(labels=self.cause_variable,axis=1)
+        y_pred = model.predict(test_X)
+        y_true = test[self.cause_variable]
+        # from sklearn.metrics import r2_score
+        print('模型预测结果的决定系数r2_score： ' ,r2_score(y_true,y_pred))
+        
+        
+        
+调用方法
+
+if __name__=='__main__':
+    LR=Liner_regression('Profit~RD_Spend+Administration+Marketing_Spend+Florida+California',profit_new,'Profit')
+#     LR.liner_regression()
+#     LR.model_test()
+#     LR.predict()
+    
+    
+    
+    
+    
