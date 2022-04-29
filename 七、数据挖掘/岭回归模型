@@ -1,0 +1,69 @@
+class Ridge_regression:
+    '''
+    X:自变量的数据集
+    Y:因变量的数据集
+    test_size:测试集所占的比例
+    '''
+    # from sklearn.linear_model import Ridge,RidgeCV
+    def __init__(self,X,Y,test_size=0.2):
+        self.X=X
+        self.Y=Y
+        self.test_size=test_size
+        # from sklearn.model_selection import train_test_split
+        self.x_train,self.x_test,self.y_train,self.y_test = train_test_split(self.X,self.Y,test_size=self.test_size) # 切分数据集
+        
+    def drawing_plot(self,lambdas = np.logspace(-5,2,200)):
+        '''lambdas = np.logspace(-5,2,200) :从10^-5 到 10^2 之间生成200个等比数'''
+        # 绘制 lambda和对应回归系数的折线图
+        ridge_coff = []
+        for i in lambdas:
+            ridge= Ridge(alpha=i,normalize=True)
+            ridge.fit(self.x_train,self.y_train)
+            ridge_coff.append(ridge.coef_)
+
+        plt.figure(dpi=150)
+        plt.style.use('ggplot')
+        plt.plot(lambdas,ridge_coff)
+        plt.xscale('log')   # 对x轴做对数处理
+        plt.xlabel('Log10(lambda)')
+        plt.ylabel('coef')
+        plt.show()
+        
+    def cross_validation(self,lambdas,cv=10):
+        '''
+        lambdas:需要验证的lambda系数值们
+        cv=10:默认进行10折交叉验证
+        '''
+        global best_lambda
+        # 对于 lambdas 中的每一个值，都执行10次交叉验证并计算 平均均方误差
+        ridge_cv = RidgeCV(alphas=lambdas,normalize=True,scoring='neg_mean_squared_error',cv=cv)
+        ridge_cv.fit(self.x_train,self.y_train)
+        best_lambda = ridge_cv.alpha_  # 返回 平均均方误差 最小的lambda值
+        print('平均均方误差最小的lambda值：\n',best_lambda)
+        
+    def ridge_predict(self):
+        global best_lambda
+        # 模型的预测
+        ridge = Ridge(alpha=best_lambda,normalize=True)
+        ridge.fit(self.x_train,self.y_train)
+        coefs = pd.Series(index = ['Intercept']+ self.x_train.columns.tolist(),
+                          data = [ridge.intercept_]+ridge.coef_.tolist())
+        print('回归系数为：\n',coefs)
+
+        # from sklearn.metrics import mean_squared_error
+        y_predict = ridge.predict(self.x_test)
+        MSE = mean_squared_error(self.y_test,y_predict)
+        print('模型的均方误差MSE为：','%.3f'%MSE)
+        
+        
+        
+        
+        
+        
+        
+        
+if __name__=='__main__':
+    ridge= Ridge_regression(X=X,Y=data['Y'])
+    ridge.drawing_plot()
+    # ridge.cross_validation(lambdas=np.logspace(-5,2,200))
+    # ridge.ridge_predict()
