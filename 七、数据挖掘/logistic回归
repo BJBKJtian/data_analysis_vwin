@@ -1,0 +1,84 @@
+class Logistic_regression:
+    '''
+    X:自变量数据集
+    Y:因变量数据集，0为负例，1为正例
+    '''
+    
+    # from sklearn.linear_model import LogisticRegression
+    def __init__(self,X,Y,test_size=0.2):
+        self.X=X
+        self.Y=Y
+        self.test_size=test_size
+        # from sklearn.model_selection import train_test_split
+        self.x_train,self.x_test,self.y_train,self.y_test = train_test_split(self.X,self.Y,test_size=self.test_size) # 切分数据集
+    
+    
+    def logistic_fit(self,penalty='l2',solver='lbfgs',max_iter=1000):
+        '''
+        pental：模型的惩罚项，可选[none,l1,l2,elasticnet]
+            注：改变惩罚类型可能需要改变参数求解算法
+        solver：参数求解算法，可选{‘newton-cg’, ‘lbfgs’, ‘liblinear’, ‘sag’, ‘saga’}
+            For small datasets, ‘liblinear’ is a good choice, whereas ‘sag’ and ‘saga’ are faster for large ones;
+            For multiclass problems, only ‘newton-cg’, ‘sag’, ‘saga’ and ‘lbfgs’ handle multinomial loss;
+           ‘liblinear’ is limited to one-versus-rest schemes.
+         max_iter:最大迭代次数
+        '''
+        global logistic
+        # 模型的预测
+        logistic = LogisticRegression(penalty=penalty,solver=solver,max_iter=max_iter)
+        logistic.fit(self.x_train,self.y_train)
+        
+        
+        list0=['%.3f'%i for i in logistic.coef_.tolist()[0]]
+        data1=['%.3f'%i for i in logistic.intercept_] + list0
+        data2=[None]+['%.3f'%(np.e**i) for i in logistic.coef_.tolist()[0]]
+        data3=[[x,y] for x,y in zip(data1,data2)]
+        index=['Intercept']+ self.x_train.columns.tolist()
+        columns=['各变量的系数','发生比(e**β)']
+        coefs = pd.DataFrame(index=index,data = data3,columns=columns)
+        print(coefs)
+        print('='*40,'',sep='\n')
+
+        
+    def logistic_predict(self):   
+        global logistic
+        y_predict = logistic.predict(self.x_test)
+        print(pd.Series(y_predict).value_counts())
+        cm=metrics.confusion_matrix(self.y_test,y_predict)
+        if len(cm)==2: # 如果是二分类
+            cm=pd.DataFrame(confusion_matrix(self.y_test,y_predict),
+                            index=['实际为负0','实际为正1'],
+                            columns=['预测为负0','预测为正1'])
+        print('混淆矩阵为：\n',cm)
+        print('='*40,'',sep='\n')
+        # from sklearn import metrics
+        acc=metrics.scorer.accuracy_score(self.y_test,y_predict)*100
+        recall= metrics.scorer.recall_score(self.y_test,y_predict)*100
+        precision= metrics.scorer.precision_score(self.y_test,y_predict)*100
+        print('准确率Accuracy： ','%.3f%%'%acc)
+        print('回召率recall： ','%.3f%%'%recall)
+        print('精准率precision： ','%.3f%%'%precision)
+        print('='*40,'',sep='\n')
+        
+        y_score = logistic.predict_proba(self.x_test)[:,1] # 模型预测正例的概率
+        fpr,tpr,threshold=metrics.roc_curve(self.y_test,y_score)
+        roc_auc = metrics.auc(fpr,tpr)
+        
+        plt.stackplot(fpr,tpr,color='steelblue',alpha=0.5,edgecolor='black')
+        plt.plot(fpr,tpr,color='black',lw=1)
+        plt.plot([0,1],[0,1],color='red',ls='--')
+        plt.text(0.5,0.3,'AUC=%.3f'%roc_auc)
+        plt.xlabel('负例错判率(1-Specificity)')
+        plt.ylabel('正例覆盖率(Sensitivity)')
+        plt.title('ROC curve')
+        plt.show()
+        
+        
+        
+        
+        
+        
+if __name__=='__main__':
+    logist= Logistic_regression(X,Y,test_size=0.25)
+    logist.logistic_fit(solver='liblinear',max_iter=100)
+    logist.logistic_predict()
