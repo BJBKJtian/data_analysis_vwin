@@ -1,0 +1,98 @@
+需要导入的包
+
+import pandas as pd
+from sklearn.model_selection import train_test_split,GridSearchCV
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+from sklearn import metrics
+from sklearn import tree
+
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
+plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+
+
+函数体
+
+class Decision_Tree_Classifier:
+    '''
+    X：自变量数据
+    Y：因变量数据
+    '''
+    def __init__(self,X,Y,test_size=0.2):
+        self.X=X
+        self.Y=Y
+        self.x_train,self.x_test,self.y_train,self.y_test = train_test_split(self.X,self.Y,test_size=0.2)
+        
+    def find_best_params(self,max_depth,min_samples_split,min_samples_leaf,cv=10):
+        '''
+        ~三个参数均为list形式~
+        max_depth # 树的最大深度
+        min_samples_split # 一个节点必须要包含至少min_samples_split个训练样本，这个节点才允许被分枝
+        min_samples_leaf # 一个节点在分枝后的每个子节点都必须包含至少min_samples_leaf个训练样本，否则分枝就不会发生
+        cv：交叉验证
+        '''
+        paramters = {'max_depth':max_depth,
+                     'min_samples_split':min_samples_split,
+                     'min_samples_leaf':min_samples_leaf}
+    
+        # 网格搜索法，测试不同的参数值
+        grid = GridSearchCV(estimator=DecisionTreeClassifier(),
+                            param_grid = paramters,
+                            cv = cv)
+        grid.fit(self.x_train,self.y_train)
+        # 返回最佳的参数值
+        best_params = grid.best_params_
+        print('测试集拟合的最佳参数值：\n',best_params)
+    
+    def fit_predict(self,max_depth,min_samples_split,min_samples_leaf):
+        CART_class = DecisionTreeClassifier(max_depth=max_depth,
+                                            min_samples_leaf=min_samples_leaf,
+                                            min_samples_split=min_samples_split
+                                            )
+        decision_tree = CART_class.fit(self.x_train,self.y_train)
+        pred = CART_class.predict(self.x_test) 
+        print('模型在训练集上的准确率为：',accuracy_score(self.y_train,CART_class.predict(self.x_train)))
+        print('模型在测试集上的准确率为：',accuracy_score(self.y_test,pred))
+
+        y_score = CART_class.predict_proba(self.x_test)[:,1] # 模型预测正例的概率
+        fpr,tpr,threshold=metrics.roc_curve(self.y_test,y_score)
+        roc_auc = metrics.auc(fpr,tpr)
+
+        plt.stackplot(fpr,tpr,color='steelblue',alpha=0.5,edgecolor='black')
+        plt.plot(fpr,tpr,color='black',lw=1)
+        plt.plot([0,1],[0,1],color='red',ls='--')
+        plt.text(0.5,0.3,'AUC=%.3f'%roc_auc)
+        plt.xlabel('负例错判率(1-Specificity)')
+        plt.ylabel('正例覆盖率(Sensitivity)')
+        plt.title('ROC curve')
+        plt.show()
+    
+    def drawing_tree(self,leaf_names,dpi=300):
+        '''
+        用该方法进行决策树的可视化，要求sklearn的版本在21.0以上
+        leaf_names：叶子节点的名称，list格式
+        '''
+        fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (4,4), dpi=dpi)
+        fn=self.x_train.columns
+        tree.plot_tree(CART_class,
+                       feature_names = fn, 
+                       class_names=leaf_names,
+                       filled = True)
+        # fig.savefig('C:\\Users\\Administrator\\Desktop\\imagename.png', dpi=800)
+        plt.show()
+
+
+
+
+if __name__=='__main__':
+    decisiontree=Decision_Tree_Classifier(X,Y)
+#     decisiontree.find_best_params(max_depth=[2,3,4,5,6],
+#                                   min_samples_split=[2,4,6,8],
+#                                   min_samples_leaf=[2,4,8,10,12])
+#     decisiontree.fit_predict(max_depth=3,min_samples_split=2,min_samples_leaf=2)
+    decisiontree.drawing_tree(leaf_names=['a','b'])
+
+
+
+
