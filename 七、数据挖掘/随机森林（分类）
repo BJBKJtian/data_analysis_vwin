@@ -93,7 +93,7 @@ class Random_forest_Classifier:
         
 if __name__=='__main__':
     rf = Random_forest_Classifier(X,Y)
-#     rf.find_best_max_depth_1(n_estimators=[100,120],
+#     rf.find_best_params(n_estimators=[100,120],
 #                              max_depth=[3,4,5],
 #                              min_samples_split=[2,4,6,8],
 #                              min_samples_leaf=[4,8,10],
