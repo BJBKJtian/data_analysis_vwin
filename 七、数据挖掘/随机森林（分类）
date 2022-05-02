@@ -1,0 +1,102 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+import matplotlib.pyplot as plt
+from sklearn import metrics
+from sklearn.model_selection import GridSearchCV
+
+plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
+plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+
+
+
+class Random_forest_Classifier:
+    '''
+    X：自变量数据
+    Y：因变量数据
+    '''
+    def __init__(self,X,Y,test_size=0.2):
+        self.X=X
+        self.Y=Y
+        self.x_train,self.x_test,self.y_train,self.y_test = train_test_split(self.X,self.Y,test_size=0.2)
+    
+    def find_best_params(self,max_depth,min_samples_split,min_samples_leaf,max_features,n_estimators,cv=10):
+        '''
+        ~参数均为list形式~
+        n_estimators：生成树的个数
+        max_depth # 树的最大深度
+        min_samples_split # 一个节点必须要包含至少min_samples_split个训练样本，这个节点才允许被分枝
+        min_samples_leaf # 一个节点在分枝后的每个子节点都必须包含至少min_samples_leaf个训练样本，否则分枝就不会发生
+        max_features：最大特征数
+        cv：交叉验证
+        '''
+        global best_params
+        paramters = {'n_estimators':n_estimators,
+                     'max_depth':max_depth,
+                     'min_samples_split':min_samples_split,
+                     'min_samples_leaf':min_samples_leaf,
+                     'max_features':max_features}
+
+        # 网格搜索法，测试不同的参数值
+        estimator=RandomForestClassifier(random_state=10) 
+        grid = GridSearchCV(estimator=estimator,
+                            param_grid = paramters,
+                            cv = cv)
+        grid.fit(self.x_train,self.y_train)
+        # 返回最佳的参数值
+        best_params = grid.best_params_
+        print('测试集拟合的最佳参数：\n',best_params)
+        
+    def fit_predict(self):
+        global rf_class
+        global best_params
+
+        rf_class = RandomForestClassifier(n_estimators=best_params.n_estimators,
+                                          max_depth=best_params.max_depth,
+                                          min_samples_split=best_params.min_samples_split,
+                                          min_samples_leaf=best_params.min_samples_leaf,
+                                          max_features=best_params.max_features)
+        rf_fit = rf_class.fit(self.x_train,self.y_train)
+        pred = rf_class.predict(self.x_test) 
+        print('模型在训练集上的准确率为：',accuracy_score(self.y_train,rf_class.predict(self.x_train)))
+        print('模型在测试集上的准确率为：',accuracy_score(self.y_test,pred))
+
+        y_score = rf_class.predict_proba(self.x_test)[:,1] # 模型预测正例的概率
+        fpr,tpr,threshold=metrics.roc_curve(self.y_test,y_score)
+        roc_auc = metrics.auc(fpr,tpr)
+
+        plt.stackplot(fpr,tpr,color='steelblue',alpha=0.5,edgecolor='black')
+        plt.plot(fpr,tpr,color='black',lw=1)
+        plt.plot([0,1],[0,1],color='red',ls='--')
+        plt.text(0.5,0.3,'AUC=%.3f'%roc_auc)
+        plt.xlabel('负例错判率(1-Specificity)')
+        plt.ylabel('正例覆盖率(Sensitivity)')
+        plt.title('ROC curve')
+        plt.show()
+    
+    def variable_importance(self):
+        global rf_class
+        importance = rf_class.feature_importances_
+        im=pd.Series(importance,index=self.x_train.columns)
+        im.sort_values(ascending=True).plot.barh()
+        plt.title('变量重要度条形图')
+        plt.show()
+        
+        
+        
+        
+        
+        
+        
+        
+        
+if __name__=='__main__':
+    rf = Random_forest_Classifier(X,Y)
+#     rf.find_best_max_depth_1(n_estimators=[100,120],
+#                              max_depth=[3,4,5],
+#                              min_samples_split=[2,4,6,8],
+#                              min_samples_leaf=[4,8,10],
+#                              max_features=[3,5,7,9])
+#     rf.fit_predict()
+    rf.variable_importance() 
