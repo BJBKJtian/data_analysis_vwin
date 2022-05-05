@@ -1,1 +1,7 @@
+df_onehot = pd.get_dummies(df) # df可以为DataFrame格式或Series格式
+data = pd.concat([df,df_onehot],axis=1)
+
+df.join(pd.get_dummies(df.color)) # 添加哑变量到元数据
+
+
 a.str.get_dummies()
