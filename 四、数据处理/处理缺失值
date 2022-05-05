@@ -2,12 +2,12 @@
 
 # 删除缺失值所在行或列，一般要求缺失比例大于0.3
 - 查看缺失比例大于0.3的情况
-columns = df[df.isull().sum(axis=0)/df.shape[0]] # 缺失比例大于0.3的列
-rows = df[df.isull().sum(axis=1)/df.shape[1]] # 缺失比例大于0.3的行
+columns = df[df.isull().sum(axis=0)/df.shape[0]>0.3] # 缺失比例大于0.3的列
+rows = df[df.isull().sum(axis=1)/df.shape[1]>0.3] # 缺失比例大于0.3的行
 
 - 删除所在行或列
 df.drop(columns , axis=1,replace=True) #删除列
-df.drop(rows , axis=1,replace=True) #删除行
+df.drop(rows , axis=0,replace=True) #删除行
 
 # 删除缺失值本身
 
@@ -25,6 +25,7 @@ df.fillna(method='ffill')
 df.fillna(method='bfill')
 
 # 均值、中位数、众数填充
+# 可以进行分类填充，如：男生用男生的均值填充...
 df.fillna(df.mean(),inplace=True) # 进行均值填充，适用于定量数据
 df.fillna(df.median(),inplace=True) # 进行中位数填充，适用于定量数据
 df[i].fillna(df[i].mode()[0]),inplace=True) # 进行众数填充，适用于定性数据
