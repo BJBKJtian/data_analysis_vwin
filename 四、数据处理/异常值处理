@@ -28,8 +28,8 @@ print('异常数据的行号为：\n',list(set(outliers_index_list)))
   
 3.2 z分数定位异常值
 def detect_outliers(data,threshold=3): # data为数据中的一列
-    mean_d = np.mean(data)
-    std_d = np.std(data)
+    mean_d = data.mean()
+    std_d = data.std() # 默认计算样本方差
     outliers = data.loc[np.abs((data-mean_d)/std_d)>threshold]
     return outliers
 outliers_index_list=[]
