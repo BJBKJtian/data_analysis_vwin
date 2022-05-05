@@ -5,6 +5,10 @@ pd.merge(left,right,on='subject_id',how="left")
 
 pd.merge(left,right,on=['id','subject_id'])
 
+pd.merge(left,right,left_index=True, right_index=True) # 通过索引来联结数据
+
+
+
 # pd.concat(objs,axis=0,join='outer',keys=None,ignore_index=False)
 # axis:表示在哪个轴方向上（行或者列）进行连接操作，默认 axis=0 表示行方向。
 # join:指定连接方式，取值为{"inner","outer"}，默认为 outer 表示取并集，inner代表取交集。
