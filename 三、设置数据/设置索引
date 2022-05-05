@@ -4,6 +4,9 @@ data.reset_index(inplace=True, drop=True)
 # 把表中的列设为索引，会替换已经存在的索引。
 data.set_index('Name')
 
+# 把表中的行设置为列索引
+data.columns=data.iloc[i]
+
 # 对索引的数据进行处理
 data.rename(lambda x: x+1,axis=0) # 列索引数值加1
 data.rename(index={1:'dd'}) # 索引中所有的1都变成了dd
