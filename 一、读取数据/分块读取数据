@@ -1,0 +1,12 @@
+采用逐块读取文件的主要目的是防止文件过大，一次性加载到内存，会让内存爆掉，或者内存一次性无法加载这么多。
+
+
+#设置chunksize参数，来控制每次迭代数据的大小
+chunker = pd.read_csv("data.csv",chunksize=1000)
+for piece in chunker:
+    print(type(piece))
+    #<class 'pandas.core.frame.DataFrame'>
+    print(len(piece))
+    #1000
+
+
