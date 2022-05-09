@@ -5,6 +5,8 @@ pd.set_option('display.max_columns', 50)
 pd.set_option('display.max_rows', 50)
 # 设置数据的显示精度
 pd.set_option('precision',5) # 默认6位小数
+# 设置列名对齐
+pd.set_option('display.unicode.east_asian_width',True)
 
 
 print('数据的前5行：\n', data.head())
