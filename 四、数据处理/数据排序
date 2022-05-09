@@ -1,3 +1,5 @@
+一、sort_values
+
 df.sort_values(by='col1', ascending=False,inplace=False)
 
 df.sort_values(by=['col1', 'col2'],inplace=False)
@@ -7,5 +9,16 @@ df.sort_values(by = ['col1','col3'],ascending=[False,True],ignore_index=True,inp
 
 
 
+二、rank
 
+df['排序']=df['销量'].rank(method='first',ascending=False)
+# 将原数据降序排列
+# 当数据相同时，按照 谁先出现，谁排在前面的设定进行排序
+# 生成一列数据
 
+method参数：
+  average:默认，平均排名
+  min
+  max
+  first
+  dense:排名相同的数据只占一个名次
