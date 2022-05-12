@@ -1,23 +1,22 @@
 一、t分布的区间估计
 要求：1）总体服从正态分布；2）总体标准差未知
 
-def mean_interval_estimation_t(data,alpha=0.05,sampling='infinite',N=None):
+def mean_interval_estimation_t(sample_mean,n,sample_std,alpha=0.05,sampling='infinite',N=None):
+    import numpy as np
+    import scipy.stats as st    
     '''
-    data:DataFrame中的具体一列数据，如df['x1']
     alpha:显著性水平
     sampling:默认为无限总体和有限不放回抽样；有限放回需要加入修正系数
     N:总体容量，有限放回时需要加入此参数
     '''
-    n=len(data)
+
     t_score = st.t.isf(alpha / 2, df = (n-1)) # t分布临界值，st:scipy.stats
-    
-    sample_mean=data.mean()
-    sample_std=data.std()
+
     if sampling=='infinite':
       confidence_interval=(sample_mean-t_score*(sample_std/np.sqrt(n)),sample_mean+t_score*(sample_std/np.sqrt(n)))
     else:
       confidence_interval=(sample_mean-t_score*(sample_std/np.sqrt(n))*np.sqrt((N-n)/(n-1)),sample_mean+t_score*(sample_std/np.sqrt(n))*np.sqrt((N-n)/(n-1)))
-    print(f'在置信度{1-alpha}下，{data.name}总体均值的置信区间为：')
+    print(f'在置信度{1-alpha}下，总体均值的置信区间为：')
     return confidence_interval
 
 
@@ -27,19 +26,20 @@ def mean_interval_estimation_t(data,alpha=0.05,sampling='infinite',N=None):
 —— 总体标准差已知，样本容量>=30
 —— 总体标准差未知，样本容量>=30
 
-def mean_interval_estimation_z(data,alpha=0.05,sigma=None,sampling='infinite',N=None):
+def mean_interval_estimation_z(sample_mean,n,sample_std=None,alpha=0.05,sigma=None,sampling='infinite',N=None):
+    import numpy as np
+    import scipy.stats as st
     '''
-    data:DataFrame中的具体一列数据，如df['x1']
+    mean:均值
+    std:标准差
     alpha:显著性水平
     sigma:总体标准差，默认未知，即要求样本容量>=30
     sampling:默认为无限总体和有限不放回抽样；有限放回需要加入修正系数
     N:总体容量，有限放回时需要加入此参数
     '''
-    n=len(data)
-    z_score = st.norm.isf(alpha / 2) # t分布临界值，st:scipy.stats
-    
-    sample_mean=data.mean()
-    sample_std=data.std()
+
+    z_score = st.norm.isf(alpha / 2) # z分布临界值，st:scipy.stats
+
     
     if sigma==None:
       if sampling=='infinite':
@@ -52,7 +52,7 @@ def mean_interval_estimation_z(data,alpha=0.05,sigma=None,sampling='infinite',N=
       else:
         confidence_interval=(sample_mean-z_score*(sigma/np.sqrt(n))*np.sqrt((N-n)/(n-1)),sample_mean+z_score*(sigma/np.sqrt(n))*np.sqrt((N-n)/(n-1)))
     
-    print(f'在置信度{1-alpha}下，{data.name}总体均值的置信区间为：')
+    print(f'在置信度{1-alpha}下，总体均值的置信区间为：')
     return confidence_interval
 
 
