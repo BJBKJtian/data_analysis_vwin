@@ -1,4 +1,6 @@
 def sample_size_ratio(allow_error,p=0.5,alpha=0.05,N=None):
+    import numpy as np
+    import scipy.stats as st
     '''
     allow_error:允许的误差大小
     alpha：显著性水平
