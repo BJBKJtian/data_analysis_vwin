@@ -1,0 +1,17 @@
+
+def ratio_ratio_interval_estimation_z(p1,n1, p2,n2, alpha=0.05):
+    import scipy.stats as st
+    import numpy as np
+    '''
+    alpha:显著性水平
+    sigma_equal:是否满足方差齐性,默认方差不齐
+    '''
+    z_value = st.norm.isf(alpha/2)
+    tmp = np.sqrt(p1*(1-p1)/n1 + p2*(1-p2)/n2)
+
+    confidence_interval=((p1-p2) -tmp*z_value, (p1-p2) +tmp*z_value)
+    print(f'在置信度{1-alpha}下，总体比率之差的置信区间为：')
+    return confidence_interval
+
+
+
