@@ -1,21 +1,19 @@
 要求：两总体均服从正态分布
 
-def var_var_interval_estimation_F(data1,data2,alpha=0.05):
+def var_var_interval_estimation_F(var1,n1, var2,n2, alpha=0.05):
+    import scipy.stats as st
+    import numpy as np   
     '''
-    data:DataFrame中的具体一列数据，如df['x1']
     alpha:显著性水平
     '''
-    n1=len(data1)
-    n2=len(data2)
-    var1=data1.var(ddof=1) # 默认ddof=1：自由度偏1，即计算样本方差
-    var2=data2.var() # pandas默认计算样本方差，numpy默认计算总体方差
+
     
     f_score0 = st.f.isf(alpha / 2, dfn=n1-1, dfd=n2-1)    # F分布临界值
     f_score1 = st.f.isf(1-alpha / 2, dfn=n1-1, dfd=n2-1)  # st:scipy.stats 
     
     std_interval = (np.sqrt((var1 / var2) / f_score0),np.sqrt((var1 / var2) / f_score1))
-    print(f'在置信度{1-alpha}下，{data1.name}/{data2.name}总体标准差之比的置信区间为：\n',std_interval)
+    print(f'在置信度{1-alpha}下，var1 / var2总体标准差之比的置信区间为：\n',std_interval)
     print('='*50)
     confidence_interval=((var1 / var2) / f_score0,(var1 / var2) / f_score1)
-    print(f'在置信度{1-alpha}下，{data1.name}/{data2.name}总体方差之比的置信区间为：')
+    print(f'在置信度{1-alpha}下，var1 / var2总体方差之比的置信区间为：')
     return confidence_interval
