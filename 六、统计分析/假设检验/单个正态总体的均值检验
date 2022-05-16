@@ -1,18 +1,16 @@
 一、Z检验
 要求：总体方差已知
 
-def hypothetical_test_z(data,assume_mean,sigma,alpha=0.05,alternative='two-sided'):
+def hypothetical_test_z(mean,assume_mean,n,std,alpha=0.05,alternative='two-sided'):
+    import numpy as np
+    import scipy.stats as st
     '''
-    data:要检验的数据，需传入pandas格式，如df['x1']
     assume_mean:检验的均值
-    sigma:总体标准差
+    std:总体标准差
     alpha:显著性水平   
     alternative:选择检验方式。默认双尾检验；‘left’：左尾检验；‘right’：右尾检验
     '''
-    mean=data.mean()
-    n=len(data) #计算样本量
-    std=sigma
-    
+
     z_value=(mean-assume_mean)/(std/np.sqrt(n))
     
     if alternative=='two-sided': # 计算双尾检验的z值
@@ -26,7 +24,7 @@ def hypothetical_test_z(data,assume_mean,sigma,alpha=0.05,alternative='two-sided
     else:
         z_alpha=st.norm.isf(alpha)
         p_value=st.norm.sf(abs(z_value))  
-    print('在显著性水平为{:.3f}时，对应的z值为{:.3f}'.format(alpha,z_alpha))
+    print('在显著性水平为{:.2f}时，对应的z值为{:.3f}'.format(alpha,z_alpha))
     print('检验的z值为{:.3f}，其对应的p值为{:.3f}'.format(z_value,p_value))
 
 
