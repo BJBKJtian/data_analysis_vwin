@@ -1,0 +1,17 @@
+要求训练集的数据与测试集的数据 分布是相似的
+
+# 单一变量测试
+train_count = train.shape[0]
+test_count = test.shape[0]
+
+for i in train.columns[:-1]:
+    (train[i].value_counts().sort_index() / train_count).plot(label = 'train')
+    (test[i].value_counts().sort_index() / test_count).plot(label = 'test')
+    plt.legend()
+    plt.xlabel(i)
+    plt.ylabel('ratio')
+    plt.show()
+    
+# 联合变量测试
+
+
